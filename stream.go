@@ -6,6 +6,7 @@ type Hasher interface {
 }
 
 type stream struct {
+	Hasher
 	roots *[]uint64
 }
 
@@ -14,7 +15,8 @@ func NewStream(hasher Hasher, roots *[]uint64) *stream {
 		roots = new([]uint64)
 	}
 	return &stream{
-		roots: roots,
+		Hasher: hasher,
+		roots:  roots,
 	}
 }
 
