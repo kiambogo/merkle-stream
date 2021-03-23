@@ -17,12 +17,12 @@ func (th testHasher) Parent() []byte {
 }
 
 func Test_NewStream(t *testing.T) {
-	stream := NewStream(testHasher{})
-	assert.Equal(t, stream.Roots(), []uint64(nil))
+	stream := NewStream(testHasher{}, nil)
+	assert.Equal(t, stream.Roots(), new([]uint64))
 
-	stream = NewStream(testHasher{}, 1)
-	assert.Equal(t, stream.Roots(), []uint64{1})
+	stream = NewStream(testHasher{}, &[]uint64{1})
+	assert.Equal(t, stream.Roots(), &[]uint64{1})
 
-	stream = NewStream(testHasher{}, 1, 2, 3, 4, 5)
-	assert.Equal(t, stream.Roots(), []uint64{1, 2, 3, 4, 5})
+	stream = NewStream(testHasher{}, &[]uint64{1, 2, 3, 4, 5})
+	assert.Equal(t, stream.Roots(), &[]uint64{1, 2, 3, 4, 5})
 }

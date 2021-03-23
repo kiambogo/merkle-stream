@@ -6,15 +6,18 @@ type Hasher interface {
 }
 
 type stream struct {
-	roots []uint64
+	roots *[]uint64
 }
 
-func NewStream(hasher Hasher, roots ...uint64) *stream {
+func NewStream(hasher Hasher, roots *[]uint64) *stream {
+	if roots == nil {
+		roots = new([]uint64)
+	}
 	return &stream{
 		roots: roots,
 	}
 }
 
-func (s stream) Roots() []uint64 {
+func (s stream) Roots() *[]uint64 {
 	return s.roots
 }
