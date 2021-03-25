@@ -53,8 +53,8 @@ func (s *stream) Append(data []byte) {
 	}
 	leaf := s.Node().Build(leafPartial, s.HashLeaf(leafPartial))
 
-	// hash:   s.HashLeaf(data),
 	*s.roots = append(*s.roots, leaf)
+	*s.nodes = append(*s.nodes, leaf)
 	s.blocks++
 
 	for len(*s.roots) > 1 {

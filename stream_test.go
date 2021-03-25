@@ -40,3 +40,16 @@ func Test_NewStream_SetRootsAndNodes(t *testing.T) {
 	assert.Equal(t, stream.Roots(), roots)
 	assert.Equal(t, stream.Nodes(), roots)
 }
+
+func Test_NewStream_Append(t *testing.T) {
+	t.Parallel()
+
+	stream := NewStream(blake2bHasher, nil, nil)
+
+	stream.Append([]byte("hello, world!"))
+	nodes := *stream.Nodes()
+	assert.Len(t, nodes, 1)
+
+	stream.Append([]byte("foo"))
+	assert.Len(t, *stream.Nodes(), 3)
+}

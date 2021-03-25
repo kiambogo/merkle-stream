@@ -1,6 +1,8 @@
 package merkle
 
-import "crypto"
+import (
+	"golang.org/x/crypto/blake2b"
+)
 
 type NodeHasher interface {
 	Node() Node
@@ -14,8 +16,16 @@ func (b2b BLAKE2b512) Node() Node {
 	return &DefaultNode{}
 }
 func (b2b BLAKE2b512) HashLeaf(node PartialNode) []byte {
-	return crypto.BLAKE2b_512.New().Sum(node.data)
+	hash := []byte{}
+	for _, h := range blake2b.Sum512(node.data) {
+		hash = append(hash, h)
+	}
+	return hash
 }
 func (b2b BLAKE2b512) HashParent(left, right Node) []byte {
-	return crypto.BLAKE2b_512.New().Sum(append(left.Hash(), right.Hash()...))
+	hash := []byte{}
+	for _, h := range blake2b.Sum512(append(left.Hash(), right.Hash()...)) {
+		hash = append(hash, h)
+	}
+	return hash
 }
