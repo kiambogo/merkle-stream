@@ -47,9 +47,28 @@ func Test_NewStream_Append(t *testing.T) {
 	stream := NewStream(blake2bHasher, nil, nil)
 
 	stream.Append([]byte("hello, world!"))
-	nodes := *stream.Nodes()
-	assert.Len(t, nodes, 1)
+	checkNodeCounts(t, 1, 0, stream)
 
 	stream.Append([]byte("foo"))
-	assert.Len(t, *stream.Nodes(), 3)
+	checkNodeCounts(t, 2, 1, stream)
+
+	stream.Append([]byte("bar"))
+	checkNodeCounts(t, 3, 1, stream)
+
+	stream.Append([]byte("baz"))
+	checkNodeCounts(t, 4, 3, stream)
+}
+
+func checkNodeCounts(t *testing.T, expectedLeafs, expectedParents int, stream *stream) {
+	var leafNodes, parentNodes = 0, 0
+	for _, n := range *stream.nodes {
+		if n.Kind() == leaf {
+			leafNodes++
+		} else {
+			parentNodes++
+		}
+	}
+	assert.Equal(t, expectedLeafs, leafNodes)
+	assert.Equal(t, expectedParents, parentNodes)
+	return
 }
