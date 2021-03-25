@@ -10,7 +10,7 @@ type stream struct {
 	NodeHasher         // hashing implementation to use when building the merkle tree
 	roots      *[]Node // the current set of root nodes in the tree
 	nodes      *[]Node // the current set of all nodes in the tree
-	blocks     int     // size of the tree (might be ok to just len(nodes))
+	blocks     uint64  // size of the tree (might be ok to just len(nodes))
 	wg         *sync.Mutex
 }
 
@@ -36,6 +36,10 @@ func (s stream) Roots() *[]Node {
 
 func (s stream) Nodes() *[]Node {
 	return s.nodes
+}
+
+func (s stream) Blocks() uint64 {
+	return s.blocks
 }
 
 func (s *stream) Append(data []byte) {
