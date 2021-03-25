@@ -15,6 +15,14 @@ go get github.com/kiambogo/merkle-stream
 ## Usage
 
 ``` go
+import github.com/kiambogo/merkle-stream
+
+hasher := merkle.BLAKE2b512{}
+stream := merkle.NewStream(hasher, nil, nil)
+stream.Append([]byte("hello, world!"))
+stream.Append([]byte("foo"))
+stream.Append([]byte("bar"))
+log.Println(stream.Nodes())
 ```
 
 ## License

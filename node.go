@@ -1,5 +1,7 @@
 package merkle
 
+import "fmt"
+
 type nodeKind int
 
 const (
@@ -53,4 +55,8 @@ func (dn DefaultNode) Build(part PartialNode, hash []byte) Node {
 		data:   part.data,
 		hash:   hash,
 	}
+}
+
+func (dn DefaultNode) String() string {
+	return fmt.Sprintf("{Index: %d, Data: %s}", dn.index, dn.data)
 }
