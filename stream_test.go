@@ -6,23 +6,37 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type testHasher struct{}
+var blake2bHasher = BLAKE2b512{}
 
-func (th testHasher) HashLeaf(node Node) []byte {
-	return []byte("leaf-hash")
+func Test_NewStream_Empty(t *testing.T) {
+	t.Parallel()
+
+	stream := NewStream(blake2bHasher, nil, nil)
+
+	assert.Equal(t, stream.Roots(), new([]Node))
 }
 
-func (th testHasher) HashParent(left, right Node) []byte {
-	return []byte("parent-hash")
-}
+func Test_NewStream_SetRootsAndNodes(t *testing.T) {
+	t.Parallel()
 
-func Test_NewStream(t *testing.T) {
-	stream := NewStream(testHasher{}, nil, nil)
-	assert.Equal(t, stream.Roots(), new([]uint64))
+	roots := &[]Node{
+		DefaultNode{
+			index:  0,
+			parent: 1,
+			kind:   leaf,
+			data:   []byte("hello, i'm node a"),
+			hash:   []byte{},
+		},
+		DefaultNode{
+			index:  2,
+			parent: 1,
+			kind:   leaf,
+			data:   []byte("hello, i'm node b"),
+			hash:   []byte{},
+		},
+	}
 
-	stream = NewStream(testHasher{}, &[]uint64{1}, nil)
-	assert.Equal(t, stream.Roots(), &[]uint64{1})
-
-	stream = NewStream(testHasher{}, &[]uint64{1, 2, 3, 4, 5}, nil)
-	assert.Equal(t, stream.Roots(), &[]uint64{1, 2, 3, 4, 5})
+	stream := NewStream(blake2bHasher, roots, roots)
+	assert.Equal(t, stream.Roots(), roots)
+	assert.Equal(t, stream.Nodes(), roots)
 }

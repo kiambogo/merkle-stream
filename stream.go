@@ -51,7 +51,7 @@ func (s *stream) Append(data []byte) {
 		data:   data,
 		kind:   leaf,
 	}
-	leaf := s.Node().Build(leafPartial, s.HashLeaf(leafPartial.data))
+	leaf := s.Node().Build(leafPartial, s.HashLeaf(leafPartial))
 
 	// hash:   s.HashLeaf(data),
 	*s.roots = append(*s.roots, leaf)
@@ -67,14 +67,14 @@ func (s *stream) Append(data []byte) {
 		}
 
 		// construct a new parent node
-		newParent := PartialNode{
+		newParentPart := PartialNode{
 			index:  left.Parent(),
 			parent: flattree.Parent(left.Parent()),
 			data:   nil,
 			kind:   parent,
 		}
 
-		// hash:   s.HashParent(left.Data(), right.Data()),
+		newParent := s.Node().Build(newParentPart, s.HashParent(left, right))
 
 		// remove the last two elements of the roots
 		*s.roots = (*s.roots)[:len(*s.roots)-2]

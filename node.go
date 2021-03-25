@@ -18,6 +18,7 @@ type Node interface {
 	Index() uint64
 	Parent() uint64
 	Kind() nodeKind
+	Hash() []byte
 	Build(part PartialNode, hash []byte) Node
 }
 
@@ -40,6 +41,9 @@ func (dn DefaultNode) Data() []byte {
 }
 func (dn DefaultNode) Kind() nodeKind {
 	return dn.kind
+}
+func (dn DefaultNode) Hash() []byte {
+	return dn.hash
 }
 func (dn DefaultNode) Build(part PartialNode, hash []byte) Node {
 	return DefaultNode{
