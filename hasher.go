@@ -15,6 +15,7 @@ type BLAKE2b512 struct{}
 func (b2b BLAKE2b512) Node() Node {
 	return &DefaultNode{}
 }
+
 func (b2b BLAKE2b512) HashLeaf(node PartialNode) []byte {
 	hash := []byte{}
 	for _, h := range blake2b.Sum512(node.data) {
@@ -22,6 +23,7 @@ func (b2b BLAKE2b512) HashLeaf(node PartialNode) []byte {
 	}
 	return hash
 }
+
 func (b2b BLAKE2b512) HashParent(left, right Node) []byte {
 	hash := []byte{}
 	for _, h := range blake2b.Sum512(append(left.Hash(), right.Hash()...)) {
