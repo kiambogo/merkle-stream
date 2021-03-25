@@ -1,6 +1,7 @@
 package merkle
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -71,4 +72,26 @@ func checkNodeCounts(t *testing.T, expectedLeafs, expectedParents int, stream *s
 	assert.Equal(t, expectedLeafs, leafNodes)
 	assert.Equal(t, expectedParents, parentNodes)
 	return
+}
+
+func Benchmark_Blake2BStream100(b *testing.B) {
+	benchmarkBlake2BStream(100, b)
+}
+
+func Benchmark_Blake2BStream1000(b *testing.B) {
+	benchmarkBlake2BStream(1000, b)
+}
+
+func Benchmark_Blake2BStream10000(b *testing.B) {
+	benchmarkBlake2BStream(10000, b)
+}
+
+func benchmarkBlake2BStream(i int, b *testing.B) {
+	stream := NewStream(blake2bHasher, nil, nil)
+
+	for n := 0; n < b.N; n++ {
+		for j := 0; j < i; j++ {
+			stream.Append([]byte(fmt.Sprint(j)))
+		}
+	}
 }
