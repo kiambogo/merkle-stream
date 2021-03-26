@@ -6,6 +6,8 @@ stream which constructs a merkle tree based on the incoming data.
 
 adapted from https://github.com/datrs/merkle-tree-stream.
 
+Archived as code has been moved over to https://github.com/kiambogo/go-hypercore.
+
 ## Installation
 
 ``` sh
